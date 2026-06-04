@@ -17,23 +17,16 @@ class ManagerAuthController extends Controller
     {
         $credentials = $request->only('email', 'password');
 
-        if (Auth::attempt($credentials)) {
-
-            if (Auth::user()->role !== 'manager') {
-                Auth::logout();
-
-                return back()->with(
-                    'error',
-                    'You are not a Manager'
-                );
-            }
-
+        if (Auth::guard('manager')->attempt($credentials)) {
             return redirect('/manager/dashboard');
         }
 
-        return back()->with(
-            'error',
-            'Invalid Credentials'
-        );
+        return back()->with('error', 'Invalid Credentials');
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::guard('manager')->logout();
+        return redirect('/');
     }
 }

@@ -17,23 +17,16 @@ class AdminAuthController extends Controller
     {
         $credentials = $request->only('email', 'password');
 
-        if (Auth::attempt($credentials)) {
-
-            if (Auth::user()->role !== 'admin') {
-                Auth::logout();
-
-                return back()->with(
-                    'error',
-                    'You are not an Admin'
-                );
-            }
-
+        if (Auth::guard('admin')->attempt($credentials)) {
             return redirect('/admin/dashboard');
         }
 
-        return back()->with(
-            'error',
-            'Invalid Credentials'
-        );
+        return back()->with('error', 'Invalid Credentials');
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::guard('admin')->logout();
+        return redirect('/');
     }
 }

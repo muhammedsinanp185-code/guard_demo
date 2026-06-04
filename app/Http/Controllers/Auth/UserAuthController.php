@@ -17,23 +17,16 @@ class UserAuthController extends Controller
     {
         $credentials = $request->only('email', 'password');
 
-        if (Auth::attempt($credentials)) {
-
-            if (Auth::user()->role !== 'user') {
-                Auth::logout();
-
-                return back()->with(
-                    'error',
-                    'You are not a User'
-                );
-            }
-
+        if (Auth::guard('web')->attempt($credentials)) {
             return redirect('/user/dashboard');
         }
 
-        return back()->with(
-            'error',
-            'Invalid Credentials'
-        );
+        return back()->with('error', 'Invalid Credentials');
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::guard('web')->logout();
+        return redirect('/');
     }
 }

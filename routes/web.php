@@ -12,21 +12,24 @@ Route::get('/login', [HomeController::class, 'loginSelection']);
 
 Route::get('/user/login', [UserAuthController::class, 'showLogin']);
 Route::post('/user/login', [UserAuthController::class, 'login']);
+Route::post('/user/logout', [UserAuthController::class, 'logout'])->name('user.logout');
 
 Route::get('/admin/login', [AdminAuthController::class, 'showLogin']);
 Route::post('/admin/login', [AdminAuthController::class, 'login']);
+Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 
 Route::get('/manager/login', [ManagerAuthController::class, 'showLogin']);
 Route::post('/manager/login', [ManagerAuthController::class, 'login']);
+Route::post('/manager/logout', [ManagerAuthController::class, 'logout'])->name('manager.logout');
 
 Route::get('/user/dashboard', function () {
     return view('dashboards.user');
-})->middleware('role:user');
+})->middleware('user');
 
 Route::get('/admin/dashboard', function () {
     return view('dashboards.admin');
-})->middleware('role:admin');
+})->middleware('admin');
 
 Route::get('/manager/dashboard', function () {
     return view('dashboards.manager');
-})->middleware('role:manager');
+})->middleware('manager');

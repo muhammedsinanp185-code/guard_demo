@@ -69,7 +69,13 @@
         <span class="role-badge">Admin</span>
         <h1>Admin Dashboard</h1>
         <p>You have successfully logged into the admin portal.</p>
-        <a href="/" class="btn">Logout / Home</a>
+        <div style="display: flex; gap: 15px; justify-content: center;">
+            <a href="/" class="btn">Home</a>
+            <form action="{{ route('admin.logout') }}" method="POST">
+                @csrf
+                <button type="submit" class="btn">Logout</button>
+            </form>
+        </div>
     </div>
 </body>
 </html>
