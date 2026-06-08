@@ -26,9 +26,7 @@ Route::get('/user/dashboard', function () {
     return view('dashboards.user');
 })->middleware('user');
 
-Route::get('/admin/dashboard', function () {
-    return view('dashboards.admin');
-})->middleware('admin');
+Route::get('/admin/dashboard', [\App\Http\Controllers\AdminController::class, 'dashboard'])->middleware('admin');
 
 Route::get('/manager/dashboard', function () {
     return view('dashboards.manager');
