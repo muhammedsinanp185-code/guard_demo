@@ -26,7 +26,22 @@ Route::get('/user/dashboard', function () {
     return view('dashboards.user');
 })->middleware('user');
 
-Route::get('/admin/dashboard', [\App\Http\Controllers\AdminController::class, 'dashboard'])->middleware('admin');
+Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [\App\Http\Controllers\AdminController::class, 'dashboard'])->name('dashboard');
+    
+    // Users Management
+    Route::get('/users', [\App\Http\Controllers\AdminController::class, 'usersIndex'])->name('users.index');
+    Route::get('/users/create', [\App\Http\Controllers\AdminController::class, 'usersCreate'])->name('users.create');
+    Route::post('/users', [\App\Http\Controllers\AdminController::class, 'usersStore'])->name('users.store');
+    
+    // Managers Management
+    Route::get('/managers', [\App\Http\Controllers\AdminController::class, 'managersIndex'])->name('managers.index');
+    Route::get('/managers/create', [\App\Http\Controllers\AdminController::class, 'managersCreate'])->name('managers.create');
+    Route::post('/managers', [\App\Http\Controllers\AdminController::class, 'managersStore'])->name('managers.store');
+    
+    // Settings
+    Route::get('/settings', [\App\Http\Controllers\AdminController::class, 'settings'])->name('settings');
+});
 
 Route::get('/manager/dashboard', function () {
     return view('dashboards.manager');
