@@ -85,4 +85,14 @@ class AdminController extends Controller
     {
         return view('admin.settings');
     }
+
+    public function toggleUserStatus($id)
+    {
+        $user = User::findOrFail($id);
+        $user->status = $user->status === 'active' ? 'blocked' : 'active';
+        $user->save();
+
+        $action = $user->status === 'blocked' ? 'blocked' : 'unblocked';
+        return back()->with('success', "User has been {$action} successfully.");
+    }
 }

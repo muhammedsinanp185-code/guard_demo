@@ -18,6 +18,10 @@ class UserAuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::guard('web')->attempt($credentials)) {
+            if (Auth::guard('web')->user()->status === 'blocked') {
+                Auth::guard('web')->logout();
+                return back()->with('error', 'Your account has been blocked by the administrator.');
+            }
             return redirect('/user/dashboard');
         }
 

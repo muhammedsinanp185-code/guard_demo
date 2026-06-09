@@ -22,9 +22,15 @@ Route::get('/manager/login', [ManagerAuthController::class, 'showLogin']);
 Route::post('/manager/login', [ManagerAuthController::class, 'login']);
 Route::post('/manager/logout', [ManagerAuthController::class, 'logout'])->name('manager.logout');
 
-Route::get('/user/dashboard', function () {
-    return view('dashboards.user');
-})->middleware('user');
+Route::middleware('user')->group(function () {
+    Route::get('/user/dashboard', function () {
+        return view('dashboards.user');
+    });
+
+    Route::get('/vehicles', [\App\Http\Controllers\VehicleController::class, 'index'])->name('vehicles.index');
+    Route::get('/vehicles/create', [\App\Http\Controllers\VehicleController::class, 'create'])->name('vehicles.create');
+    Route::post('/vehicles', [\App\Http\Controllers\VehicleController::class, 'store'])->name('vehicles.store');
+});
 
 Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\AdminController::class, 'dashboard'])->name('dashboard');
@@ -33,6 +39,7 @@ Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/users', [\App\Http\Controllers\AdminController::class, 'usersIndex'])->name('users.index');
     Route::get('/users/create', [\App\Http\Controllers\AdminController::class, 'usersCreate'])->name('users.create');
     Route::post('/users', [\App\Http\Controllers\AdminController::class, 'usersStore'])->name('users.store');
+    Route::post('/users/{id}/toggle-status', [\App\Http\Controllers\AdminController::class, 'toggleUserStatus'])->name('users.toggleStatus');
     
     // Managers Management
     Route::get('/managers', [\App\Http\Controllers\AdminController::class, 'managersIndex'])->name('managers.index');

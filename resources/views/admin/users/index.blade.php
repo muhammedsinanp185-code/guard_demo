@@ -27,6 +27,7 @@
                     <th>Email</th>
                     <th>Joined Date</th>
                     <th>Status</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -43,7 +44,21 @@
                     </td>
                     <td style="color: var(--text-secondary);">{{ $user->email }}</td>
                     <td>{{ $user->created_at ? $user->created_at->format('M d, Y') : 'N/A' }}</td>
-                    <td><span class="badge badge-active">Active</span></td>
+                    <td>
+                        @if($user->status === 'active')
+                            <span class="badge badge-active">Active</span>
+                        @else
+                            <span class="badge" style="background: rgba(239, 68, 68, 0.1); color: #ef4444;">Blocked</span>
+                        @endif
+                    </td>
+                    <td>
+                        <form action="{{ route('admin.users.toggleStatus', $user->id) }}" method="POST" style="margin: 0;">
+                            @csrf
+                            <button type="submit" class="btn {{ $user->status === 'active' ? 'btn-danger' : 'btn-success' }}" style="padding: 6px 12px; font-size: 0.85rem; background: {{ $user->status === 'active' ? 'rgba(239, 68, 68, 0.1)' : 'rgba(16, 185, 129, 0.1)' }}; color: {{ $user->status === 'active' ? '#ef4444' : '#10b981' }}; border: 1px solid {{ $user->status === 'active' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(16, 185, 129, 0.2)' }};">
+                                {{ $user->status === 'active' ? 'Block' : 'Unblock' }}
+                            </button>
+                        </form>
+                    </td>
                 </tr>
                 @empty
                 <tr>

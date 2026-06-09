@@ -1,81 +1,75 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>User Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-            color: #ffffff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-        }
-        .container {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 16px;
-            padding: 50px;
-            width: 100%;
-            max-width: 600px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-            text-align: center;
-            animation: zoomIn 0.5s ease-out;
-        }
-        @keyframes zoomIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        .role-badge {
-            display: inline-block;
-            padding: 6px 15px;
-            background: rgba(16, 185, 129, 0.2);
-            color: #10b981;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        h1 { margin-top: 0; font-weight: 600; font-size: 2.2rem; }
-        p { color: #cbd5e1; font-size: 1.1rem; margin-bottom: 40px; }
-        .btn {
-            padding: 12px 30px;
-            border: 1px solid rgba(255,255,255,0.3);
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            color: white;
-            background: transparent;
-        }
-        .btn:hover {
-            background: white;
-            color: #0f2027;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <span class="role-badge">User</span>
-        <h1>User Dashboard</h1>
-        <p>You have successfully logged into your account.</p>
-        <div style="display: flex; gap: 15px; justify-content: center;">
-            <a href="/" class="btn">Home</a>
-            <form action="{{ route('user.logout') }}" method="POST">
-                @csrf
-                <button type="submit" class="btn">Logout</button>
-            </form>
+@extends('layouts.user')
+
+@section('title', 'User Dashboard')
+
+@section('content')
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Dashboard</h1>
+            <p class="page-subtitle">Welcome back, {{ auth()->guard('web')->user()->name }}. Here is an overview of your account.</p>
+        </div>
+        <div style="color: var(--text-secondary); font-size: 0.9rem;">
+            <i class="fa-regular fa-calendar" style="margin-right: 8px;"></i>
+            {{ date('l, F j, Y') }}
         </div>
     </div>
-</body>
-</html>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+        <div class="stat-card glass">
+            <div class="stat-icon icon-blue">
+                <i class="fa-solid fa-car"></i>
+            </div>
+            <div class="stat-label">Registered Vehicles</div>
+            <div class="stat-value">{{ \App\Models\Vehicle::where('owner_id', auth()->guard('web')->id())->count() }}</div>
+        </div>
+
+        <div class="stat-card glass">
+            <div class="stat-icon icon-purple">
+                <i class="fa-solid fa-id-card"></i>
+            </div>
+            <div class="stat-label">Account Status</div>
+            <div class="stat-value" style="font-size: 1.8rem; margin-top: 24px;">{{ ucfirst(auth()->guard('web')->user()->status) }}</div>
+        </div>
+    </div>
+
+    <div class="table-container glass" style="margin-top: 20px;">
+        <div class="table-header">
+            <div class="table-title">
+                <i class="fa-solid fa-car-side" style="color: #3b82f6;"></i> Your Vehicles
+            </div>
+            <a href="{{ route('vehicles.index') }}" class="table-action">Manage Vehicles</a>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Vehicle Number</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @php
+                    $vehicles = \App\Models\Vehicle::where('owner_id', auth()->guard('web')->id())->latest()->take(3)->get();
+                @endphp
+                @forelse($vehicles as $vehicle)
+                <tr>
+                    <td><span style="font-weight: 500;">{{ $vehicle->vehicle_number }}</span></td>
+                    <td style="color: var(--text-secondary);">{{ $vehicle->vehicle_type }}</td>
+                    <td>
+                        <span class="badge {{ $vehicle->status === 'Active' ? 'badge-active' : '' }}" {{ $vehicle->status !== 'Active' ? 'style="background: rgba(239, 68, 68, 0.1); color: #ef4444;"' : '' }}>
+                            {{ $vehicle->status }}
+                        </span>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="3" style="text-align: center; color: var(--text-secondary); padding: 30px;">
+                        No vehicles registered yet. <a href="{{ route('vehicles.create') }}" style="color: #3b82f6;">Add a vehicle</a>
+                    </td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+@endsection

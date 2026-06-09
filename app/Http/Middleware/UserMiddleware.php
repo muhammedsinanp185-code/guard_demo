@@ -15,6 +15,11 @@ class UserMiddleware
             return redirect('/user/login');
         }
 
+        if (Auth::guard('web')->user()->status === 'blocked') {
+            Auth::guard('web')->logout();
+            return redirect('/user/login')->with('error', 'Your account has been blocked by the administrator.');
+        }
+
         return $next($request);
     }
 }
