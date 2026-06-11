@@ -9,9 +9,28 @@ use Illuminate\Support\Facades\Auth;
 
 class VehicleController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $vehicles = Vehicle::where('owner_id', Auth::id())->get();
+        $query = Vehicle::where('owner_id', Auth::id());
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('vehicle_number', 'like', "%{$search}%")
+                  ->orWhere('model', 'like', "%{$search}%")
+                  ->orWhere('color', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('type')) {
+            $query->where('vehicle_type', $request->type);
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $vehicles = $query->latest()->get();
 
         return view('vehicles.index', compact('vehicles'));
     }
@@ -34,6 +53,31 @@ class VehicleController extends Controller
             'status' => $request->status ?? 'Active'
         ]);
 
-        return redirect('/vehicles');
+        return redirect('/vehicles')->with('success', 'Vehicle added successfully!');
+    }
+
+    public function edit(Vehicle $vehicle)
+    {
+        if ($vehicle->owner_id !== Auth::id()) {
+            abort(403);
+        }
+        return view('vehicles.edit', compact('vehicle'));
+    }
+
+    public function update(Request $request, Vehicle $vehicle)
+    {
+        if ($vehicle->owner_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $vehicle->update([
+            'vehicle_number' => $request->vehicle_number,
+            'vehicle_type' => $request->vehicle_type,
+            'color' => $request->color,
+            'model' => $request->model,
+            'status' => $request->status
+        ]);
+
+        return redirect('/vehicles')->with('success', 'Vehicle updated successfully!');
     }
 }
