@@ -21,7 +21,7 @@
             </div>
             <div>
                 <label style="display: block; margin-bottom: 8px; color: var(--text-secondary); font-size: 0.9rem;">Vehicle Type</label>
-                <select name="type" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(15, 23, 42, 0.6); color: white; min-width: 150px;">
+                <select name="type" onchange="this.form.submit()" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(15, 23, 42, 0.6); color: white; min-width: 150px;">
                     <option value="">All Types</option>
                     <option value="Car" {{ request('type') == 'Car' ? 'selected' : '' }}>Car</option>
                     <option value="Bike" {{ request('type') == 'Bike' ? 'selected' : '' }}>Bike</option>
@@ -30,16 +30,25 @@
                 </select>
             </div>
             <div>
+                <label style="display: block; margin-bottom: 8px; color: var(--text-secondary); font-size: 0.9rem;">Brand</label>
+                <select name="brand" onchange="this.form.submit()" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(15, 23, 42, 0.6); color: white; min-width: 150px;">
+                    <option value="">All Brands</option>
+                    <option value="Maruti Suzuki" {{ request('brand') == 'Maruti Suzuki' ? 'selected' : '' }}>Maruti Suzuki</option>
+                    <option value="Hyundai" {{ request('brand') == 'Hyundai' ? 'selected' : '' }}>Hyundai</option>
+                    <option value="Toyota" {{ request('brand') == 'Toyota' ? 'selected' : '' }}>Toyota</option>
+                    <option value="Honda" {{ request('brand') == 'Honda' ? 'selected' : '' }}>Honda</option>
+                    <option value="Ford" {{ request('brand') == 'Ford' ? 'selected' : '' }}>Ford</option>
+                    <option value="BMW" {{ request('brand') == 'BMW' ? 'selected' : '' }}>BMW</option>
+                    <option value="Tesla" {{ request('brand') == 'Tesla' ? 'selected' : '' }}>Tesla</option>
+                </select>
+            </div>
+            <div>
                 <label style="display: block; margin-bottom: 8px; color: var(--text-secondary); font-size: 0.9rem;">Status</label>
-                <select name="status" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(15, 23, 42, 0.6); color: white; min-width: 150px;">
+                <select name="status" onchange="this.form.submit()" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(15, 23, 42, 0.6); color: white; min-width: 150px;">
                     <option value="">All Statuses</option>
                     <option value="Active" {{ request('status') == 'Active' ? 'selected' : '' }}>Active</option>
                     <option value="Inactive" {{ request('status') == 'Inactive' ? 'selected' : '' }}>Inactive</option>
                 </select>
-            </div>
-            <div>
-                <button type="submit" class="btn btn-primary" style="padding: 10px 20px;">Filter</button>
-                <a href="{{ route('vehicles.index') }}" class="btn" style="padding: 10px 20px; background: rgba(255, 255, 255, 0.1); color: white;">Clear</a>
             </div>
         </form>
     </div>
@@ -55,6 +64,7 @@
                 <tr>
                     <th>Vehicle Number</th>
                     <th>Type</th>
+                    <th>Brand</th>
                     <th>Model</th>
                     <th>Color</th>
                     <th>Status</th>
@@ -66,6 +76,7 @@
                 <tr>
                     <td><span style="font-weight: 600;">{{ $vehicle->vehicle_number }}</span></td>
                     <td style="color: var(--text-secondary);">{{ $vehicle->vehicle_type }}</td>
+                    <td style="color: var(--text-secondary);">{{ $vehicle->brand ?? 'N/A' }}</td>
                     <td style="color: var(--text-secondary);">{{ $vehicle->model ?? 'N/A' }}</td>
                     <td>
                         @if($vehicle->color)
@@ -90,7 +101,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="5" style="text-align: center; color: var(--text-secondary); padding: 30px;">
+                    <td colspan="7" style="text-align: center; color: var(--text-secondary); padding: 30px;">
                         No vehicles registered yet. Click "Add Vehicle" to register one.
                     </td>
                 </tr>

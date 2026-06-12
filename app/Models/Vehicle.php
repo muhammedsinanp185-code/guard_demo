@@ -11,6 +11,7 @@ class Vehicle extends Model
         'owner_id',
         'vehicle_number',
         'vehicle_type',
+        'brand',
         'color',
         'model',
         'status'

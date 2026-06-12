@@ -18,12 +18,17 @@ class VehicleController extends Controller
             $query->where(function($q) use ($search) {
                 $q->where('vehicle_number', 'like', "%{$search}%")
                   ->orWhere('model', 'like', "%{$search}%")
+                  ->orWhere('brand', 'like', "%{$search}%")
                   ->orWhere('color', 'like', "%{$search}%");
             });
         }
 
         if ($request->filled('type')) {
             $query->where('vehicle_type', $request->type);
+        }
+
+        if ($request->filled('brand')) {
+            $query->where('brand', $request->brand);
         }
 
         if ($request->filled('status')) {
@@ -48,6 +53,7 @@ class VehicleController extends Controller
             'owner_id' => Auth::id(),
             'vehicle_number' => $request->vehicle_number,
             'vehicle_type' => $request->vehicle_type,
+            'brand' => $request->brand,
             'color' => $request->color,
             'model' => $request->model,
             'status' => $request->status ?? 'Active'
@@ -73,6 +79,7 @@ class VehicleController extends Controller
         $vehicle->update([
             'vehicle_number' => $request->vehicle_number,
             'vehicle_type' => $request->vehicle_type,
+            'brand' => $request->brand,
             'color' => $request->color,
             'model' => $request->model,
             'status' => $request->status

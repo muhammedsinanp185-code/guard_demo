@@ -37,14 +37,28 @@
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                 <div class="form-group">
-                    <label class="form-label">Model</label>
-                    <input type="text" name="model" class="form-control" placeholder="e.g. Honda Civic">
+                    <label class="form-label">Brand</label>
+                    <select name="brand" class="form-control" required>
+                        <option value="">Select Brand</option>
+                        <option value="Maruti Suzuki">Maruti Suzuki</option>
+                        <option value="Hyundai">Hyundai</option>
+                        <option value="Toyota">Toyota</option>
+                        <option value="Honda">Honda</option>
+                        <option value="Ford">Ford</option>
+                        <option value="BMW">BMW</option>
+                        <option value="Tesla">Tesla</option>
+                    </select>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Color</label>
-                    <input type="text" name="color" class="form-control" placeholder="e.g. Red, Black, White">
+                    <label class="form-label">Model</label>
+                    <input type="text" name="model" class="form-control" placeholder="e.g. Civic">
                 </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Color</label>
+                <input type="text" name="color" class="form-control" placeholder="e.g. Red, Black, White">
             </div>
 
             <div class="form-group" style="margin-top: 20px;">

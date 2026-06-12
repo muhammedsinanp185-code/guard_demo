@@ -38,14 +38,28 @@
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                 <div class="form-group">
-                    <label class="form-label">Model</label>
-                    <input type="text" name="model" class="form-control" value="{{ old('model', $vehicle->model) }}" placeholder="e.g. Honda Civic">
+                    <label class="form-label">Brand</label>
+                    <select name="brand" class="form-control" required>
+                        <option value="">Select Brand</option>
+                        <option value="Maruti Suzuki" {{ (old('brand', $vehicle->brand) == 'Maruti Suzuki') ? 'selected' : '' }}>Maruti Suzuki</option>
+                        <option value="Hyundai" {{ (old('brand', $vehicle->brand) == 'Hyundai') ? 'selected' : '' }}>Hyundai</option>
+                        <option value="Toyota" {{ (old('brand', $vehicle->brand) == 'Toyota') ? 'selected' : '' }}>Toyota</option>
+                        <option value="Honda" {{ (old('brand', $vehicle->brand) == 'Honda') ? 'selected' : '' }}>Honda</option>
+                        <option value="Ford" {{ (old('brand', $vehicle->brand) == 'Ford') ? 'selected' : '' }}>Ford</option>
+                        <option value="BMW" {{ (old('brand', $vehicle->brand) == 'BMW') ? 'selected' : '' }}>BMW</option>
+                        <option value="Tesla" {{ (old('brand', $vehicle->brand) == 'Tesla') ? 'selected' : '' }}>Tesla</option>
+                    </select>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Color</label>
-                    <input type="text" name="color" class="form-control" value="{{ old('color', $vehicle->color) }}" placeholder="e.g. Red, Black, White">
+                    <label class="form-label">Model</label>
+                    <input type="text" name="model" class="form-control" value="{{ old('model', $vehicle->model) }}" placeholder="e.g. Civic">
                 </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Color</label>
+                <input type="text" name="color" class="form-control" value="{{ old('color', $vehicle->color) }}" placeholder="e.g. Red, Black, White">
             </div>
 
             <div class="form-group">
