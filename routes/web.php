@@ -42,6 +42,7 @@ Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/users', [\App\Http\Controllers\AdminController::class, 'usersIndex'])->name('users.index');
     Route::get('/users/create', [\App\Http\Controllers\AdminController::class, 'usersCreate'])->name('users.create');
     Route::post('/users', [\App\Http\Controllers\AdminController::class, 'usersStore'])->name('users.store');
+    Route::post('/users/{id}/toggle-status', [\App\Http\Controllers\AdminController::class, 'toggleUserStatus'])->name('users.toggleStatus');
     
     // Managers Management
     Route::get('/managers', [\App\Http\Controllers\AdminController::class, 'managersIndex'])->name('managers.index');
